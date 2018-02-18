@@ -20,35 +20,27 @@
 # developed by Brandon Amos
 # Copyright 2015-2016 Carnegie Mellon University
 
-import cv2
-import numpy as np
-import os
-import glob
-import dlib
-import sys
 import argparse
-from PIL import Image
-import pickle
-import math
-import datetime
-import threading
+import atexit
 import logging
-from sklearn.decomposition import PCA
-from sklearn.grid_search import GridSearchCV
-from sklearn.manifold import TSNE
-from sklearn.svm import SVC
+import math
+import os
+import os.path
+import pickle
+import threading
 import time
 from operator import itemgetter
-from datetime import datetime, timedelta
-from operator import itemgetter
-from sklearn.preprocessing import LabelEncoder
-import atexit
 from subprocess import Popen, PIPE
-import os.path
+
+import aligndlib
+import cv2
+import dlib
 import numpy as np
 import pandas as pd
-import aligndlib
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
 import openface
+from tensorflow_scripts.label_image import run_label
 
 logger = logging.getLogger(__name__)
 
@@ -79,17 +71,19 @@ class FaceRecogniser(object):
     below allow a user to retrain the classifier and make predictions
     on detected faces"""
 
-    def __init__(self):
+    def __init__(self, tf=True):
         self.net = openface.TorchNeuralNet(args.networkModel, imgDim=args.imgDim,cuda=args.cuda)
         self.align = openface.AlignDlib(args.dlibFacePredictor)
         self.neuralNetLock = threading.Lock()
         self.predictor = dlib.shape_predictor(args.dlibFacePredictor)
+        self.isTf = tf
+        self.tf = FaceRecogniserNW()
 
         logger.info("Opening classifier.pkl to load existing known faces db")
         with open("generated-embeddings/classifier.pkl", 'r') as f: # le = labels, clf = classifier
             (self.le, self.clf) = pickle.load(f) # Loads labels and classifier SVM or GMM
 
-    def make_prediction(self,rgbFrame,bb):
+    def make_prediction(self,rgbFrame,bb, original_frame):
         """The function uses the location of a face
         to detect facial landmarks and perform an affine transform
         to align the eyes and nose to the correct positiion.
@@ -97,7 +91,6 @@ class FaceRecogniser(object):
         generates 128 measurements which uniquly identify that face.
         These measurements are known as an embedding, and are used
         by the classifier to predict the identity of the person"""
-
         landmarks = self.align.findLandmarks(rgbFrame, bb)
         if landmarks == None:
             logger.info("///  FACE LANDMARKS COULD NOT BE FOUND  ///")
@@ -110,7 +103,11 @@ class FaceRecogniser(object):
 
         logger.info("////  FACE ALIGNED  // ")
         with self.neuralNetLock :
-            persondict = self.recognize_face(alignedFace)
+            if self.isTf:
+                persondict = self.tf.recognize_face(alignedFace, original_frame)
+                persondict['rep'] = self.getRep(alignedFace)
+            else:
+                persondict = self.recognize_face(alignedFace)
 
         if persondict is None:
             logger.info("/////  FACE COULD NOT BE RECOGNIZED  //")
@@ -269,3 +266,49 @@ class FaceRecogniser(object):
         to the same person"""
 
         d = rep1 - rep2
+
+
+class FaceRecogniserNW(object):
+    """This class implements face recognition using googles tenserflow and imagenet pretrained models"""
+    def __init__(self):
+        pass
+
+    def recognize_face(self, face_img, original_frame):
+        cv2.imwrite('/host/hacks/face_img.jpeg', face_img)
+        cv2.imwrite('/host/hacks/original_frame.jpeg', original_frame)
+        fname = "/host/hacks/face_img.jpeg"
+
+        predictions = run_label(fname)
+
+        return predictions[0]
+
+    def run_recognize_on_windows(self, original_numpy_image_array):
+
+        # and each window will be 220x220 image size
+        # Accutal possible area is a square: (400,400) ~ (1700, 1100)
+        IMAGE_X = 640
+        IMAGE_Y = 480
+        SIZE = 224
+
+        X1 = 0
+        # curr_dir = os.path.dirname(os.path.abspath(__file__))
+        counter = 0
+        file_names_list = []
+        while X1 <= (IMAGE_X - SIZE):
+            Y1 = 0
+            while Y1 <= (IMAGE_Y - SIZE):
+                # import pdb; pdb.set_trace()
+                crop_img = original_numpy_image_array[Y1:Y1 + SIZE, X1:X1 + SIZE]
+                # resized = cv2.resize(crop_img, (220, 299), interpolation=cv2.INTER_AREA)
+                file_name = "temp/temp_%d.jpeg" % counter
+                counter += 1
+
+                cv2.imwrite(file_name, crop_img)
+                file_names_list.append(file_name)
+
+                Y1 += int(SIZE / 2)
+            X1 += int(SIZE / 4)
+        print('Created %d windows images.' % counter)
+
+        predictions = run_inference_on_multiple_images(file_names_list)
+        print('There are %d predictions' % len(predictions.keys()))

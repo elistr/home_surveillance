@@ -4,7 +4,20 @@ docker network create -d bridge --subnet 192.168.0.0/24 --gateway 192.168.0.1 do
 
 should be inside subness of camera ip.
 
-2. docker run -v /Users/estrajnik/projects/home_surveillance:/host -p 9000:9000 -p 8000:8000 -p 5000:5000 --net=dockernet -t -i bjoffe/openface_flask_v2 /bin/bash
+2. docker run -v /Users/estrajnik/dev/home_surveillance:/host -p 9000:9000 -p 8000:8000 -p 5000:5000 --net=dockernet -t -i bjoffe/openface_flask_v2 /bin/bash
 
 
 http://192.168.33.21/videostream.cgi?user=admin&pwd=
+
+on mac:
+connect camera using ethernet
+sudo /usr/libexec/bootpd -D -d -i en3 -v
+
+
+scripts:
+1. kill docker:
+docker kill $(docker ps  | awk '{print $1}' | tail -n 1)
+
+
+2.go to docker container shell:
+docker exec -i -t $(docker ps  | awk '{print $1}' | tail -n 1) /bin/bash

@@ -1,0 +1,5 @@
+%%
+# machine entries have the following format:
+#
+# hostname      hwtype  hwaddr              ipaddr          bootfile
+client2         1       c4:d6:55:3a:8b:50   192.168.33.21

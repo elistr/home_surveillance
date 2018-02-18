@@ -116,6 +116,7 @@ class IPCamera(object):
 
         while True:
             success, frame = self.video.read()
+            time.sleep(0.5)
             self.captureEvent.clear()
             if success:
                 self.captureFrame = frame
@@ -234,8 +235,12 @@ class FoscamCamera(object):
         url_open.close()
         if JPEG_MAGIC_START in grabbed and JPEG_MAGIC_END in grabbed:
             jpeg_data = grabbed[grabbed.index(JPEG_MAGIC_START):grabbed.index(JPEG_MAGIC_END) + 2]
-            nparr = np.fromstring(jpeg_data, np.uint8)
-            img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+            f = open('temp.jpeg', "wb")
+            f.write(jpeg_data)
+            f.close()
+            # nparr = np.fromstring(jpeg_data, np.uint8)
+            # img_np = cv2.imdecode(nparr, cv2.CV_LOAD_IMAGE_COLOR)
+            img_np = cv2.imread('temp.jpeg', cv2.CV_LOAD_IMAGE_COLOR)
             return True, img_np
         else:
             return False, None
