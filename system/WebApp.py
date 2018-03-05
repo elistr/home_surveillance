@@ -148,8 +148,10 @@ def add_camera():
     if request.method == 'POST':  
         camURL = request.form.get('camURL')
         application = request.form.get('application')
-        detectionMethod = request.form.get('detectionMethod')
-        fpsTweak = request.form.get('fpstweak')
+        # detectionMethod = request.form.get('detectionMethod')
+        detectionMethod = False
+        # fpsTweak = request.form.get('fpstweak')
+        fpsTweak = False
         with HomeSurveillance.camerasLock :
             HomeSurveillance.add_camera(SurveillanceSystem.Camera.IPCamera(camURL,application,detectionMethod,fpsTweak))
         data = {"camNum": len(HomeSurveillance.cameras) -1}
@@ -238,8 +240,8 @@ def add_face():
         person_id = request.form.get('person_id')
         camNum = request.form.get('camera')
         img = None
-        
-        with HomeSurveillance.cameras[int(camNum)].peopleDictLock:  
+
+        with HomeSurveillance.cameras[int(camNum)].peopleDictLock:
             try:  
                 img = HomeSurveillance.cameras[int(camNum)].people[person_id].face   # Gets face of person detected in cameras 
                 predicted_name = HomeSurveillance.cameras[int(camNum)].people[person_id].identity
@@ -267,7 +269,7 @@ def retrain_classifier():
         app.logger.info("retrain button pushed. clearing event in surveillance objt and calling trainingEvent")
         HomeSurveillance.trainingEvent.clear() # Block processing threads
         retrained = HomeSurveillance.recogniser.trainClassifier()#calling the module in FaceRecogniser to start training
-        HomeSurveillance.trainingEvent.set() # Release processing threads       
+        HomeSurveillance.trainingEvent.set() # Release processing threads
         data = {"finished":  retrained}
         app.logger.info("Finished re-training")
         return jsonify(data)

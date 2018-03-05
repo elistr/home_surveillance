@@ -179,7 +179,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <span class="logo-lg"><b>Home</b>Dashboard</span> 
+        <span class="logo-lg"><b>Jingle</b>Bot</span>
         
       </h1>
       <ol class="breadcrumb">
@@ -288,22 +288,25 @@
                                         <!--<option value="detect_motion">Motion Detection</option>
                                         <option value="detect_recognise">Face Recognition</option>
                                         <option value="motion_detect_recognise">Motion Detection & Face Recognition</option>-->
-                                        <option value="segment_detect_recognise">Motion Object Segmentation & Face Recognition</option>
-                                        <option value="detect_recognise_track">Face Recognition & Tracking</option>
+{#                                        <option value="segment_detect_recognise">Motion Object Segmentation & Face Recognition</option>#}
+{#                                        <option value="detect_recognise_track">Face Recognition & Tracking</option>#}
+                                        <option value="JingleBot">JingleBot: Face Frecognition</option>
                                     </select>
                                </div>
 
                                 <div class="form-group">
                                 <label>Face Detection Method</label>
                                     <select id="detectionMethod" class="form-control">
-                                        <option value="opencv">Opencv Haar Cascade</option>
-                                        <option value="dlib">Dlib HOG Face Detector</option>
+{#                                        <option value="opencv">Opencv Haar Cascade</option>#}
+{#                                        <option value="dlib">Dlib HOG Face Detector</option>#}
+                                        <option value="blah">Super Secret Technology</option>
+
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                <label>Check for many simultaneous cameras (FPS Tweak)</label>
-                                    <input type="checkbox" id="fpstweak" value="fpstweak">
-                                </div>
+{#                                <div class="form-group">#}
+{#                                <label>Check for many simultaneous cameras (FPS Tweak)</label>#}
+{#                                    <input type="checkbox" id="fpstweak" value="fpstweak">#}
+{#                                </div>#}
                             </div>
                          
                       </div>
@@ -321,186 +324,186 @@
                <!-- ================================================================================================================================== -->
         </section>
 
-      <section class="col-lg-3 connectedSortable">
-  <!-- ============================================================================================================================== -->
-          <div class="box box-solid bg-yellow-gradient">
-              <div class="box-header with-border">
-                <h3 class="box-title">Create New Alert</h3>
-
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                  </button>
-                  <div class="btn-group">
-                    <!-- <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">
-                      <i class="fa fa-wrench"></i></button>
-                    <ul class="dropdown-menu" role="menu">
-                      <li><a href="#">Action</a></li>
-                      <li><a href="#">Another action</a></li>
-                      <li><a href="#">Something else here</a></li>
-                      <li class="divider"></li>
-                      <li><a href="#">Separated link</a></li>
-                    </ul> -->
-                  </div>
-                </div>
-              </div>
-              <!-- /.box-header -->
-              <div class="box-body">
-                <div class="row">
-                  <div class="col-md-12">
-                          <div class="col-md-12">
-                            <div class="box box-solid bg-yellow-gradient">
-                              <div class="box-header with-border">
-                               Alerts
-                              </div>
-                              <!-- /.box-header -->
-                              <div class="box-body">
-                                <div class="row">
-                                  <div class="col-md-12">
-                                      <div class="panel-body" id="alert-list" >
-                              <!-- /.list-group -->
-                              <!-- <a href="#" class="btn btn-default btn-block">Add Alerts Alerts</a> -->
-                                      </div>     
-                                  </div>
-                                  <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
-                              </div>
-                              <!-- ./box-body -->
-                                <!-- /.row -->
-                              </div>
-                              <!-- /.box-footer -->
-                            </div>
-                            <div class="panel-body form">
-                              <div class="row ">
-                                    <div class="col-md-6 ">
-                                        <div class="form-group">
-                                            <label>Cameras</label>
-                                            <select id="cameras" class="form-control">
-                                                <option value="0">Camera 0</option>
-                                                <option value="1">Camera 1</option>
-                                                <option value="2">Camera 2</option>
-                                                <option value="3">Camera 3</option>
-                                                <option value="All">All</option>
-                                            </select>
-                                        </div>
-                                         <div class="form-group">
-                                            <label>Alarm State</label>
-                                            <select id="alarmstate" class="form-control">
-                                                <option>Armed</option>
-                                                <option>Disarmed</option>
-                                                <option>All</option>
-                                            </select>
-                                        </div>
-                                           <div class="form-group">
-                                             <strong>Actions</strong>
-                                             <div class="checkbox ">
-                                               <label>
-                                                    <input id="email" type="checkbox" value="">Email Alert
-                                                </label>
-                                            </div>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input id="trigger" type="checkbox" value="">Trigger Alarm
-                                                </label>
-                                            </div>
-                                          </div>
-                                    </div>
-                                    <div class="col-md-6 ">
-                                        
-                                         <div class="form-group">
-                                                <label>Event</label>
-                                                <select id="event" class="form-control">
-                                                    <option>Motion</option>
-                                                    <option>Recognition</option>
-                                                </select>
-                                        </div>      
-                                        <div class="form-group">
-                                                <label>Select Person</label>
-                                                <select id="people"  id="disabledSelect" class="form-control">
-                                                    <option>Intruder</option>
-                                                    <option>brandon-joffe</option>
-                                                    <option>Benji Lewis</option>
-                                                    <option>robby-katz</option>
-                                                </select>
-                                        </div>  
-                                        <div class="form-group">
-                                            <label>Confidence</label>
-                                            <label>0-100%</label>
-                                            <input type="range" name="slider3" id="slider" min="0" max="100" value="50" data-show-value="true" data-popup-enabled="true">          
-                                        </div>  
-
-                                    </div>
-                                      <div class="col-lg-12">
-                                          <div class="form-group">
-                                               <label>Email Address</label>
-                                               <input class="form-control" id="emailAddress" value="" placeholder="Enter your email address">
-                                          </div>
-                                    </div>
-                                    
-                              </div> 
-                           
-                            </div>
-                                  
-                        </div>
-                      </div>
-                        
-                  </div>
-                  <!-- /.col -->
-                  <div class="box-footer text-center">
-                            <div class="btn-group pull-right" id = "facedetectbtn">
-                               <button type="button pull-right" onclick="createAlert()" class="btn btn-warning btn-xs">Create</button> 
-                           </div>      
-                </div>
-            </div>
-                <!-- ============================================================================================================================== -->
-
-        </section>
+{#      <section class="col-lg-3 connectedSortable">#}
+{#  <!-- ============================================================================================================================== -->#}
+{#          <div class="box box-solid bg-yellow-gradient">#}
+{#              <div class="box-header with-border">#}
+{#                <h3 class="box-title">Create New Alert</h3>#}
+{##}
+{#                <div class="box-tools pull-right">#}
+{#                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>#}
+{#                  </button>#}
+{#                  <div class="btn-group">#}
+{#                    <!-- <button type="button" class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown">#}
+{#                      <i class="fa fa-wrench"></i></button>#}
+{#                    <ul class="dropdown-menu" role="menu">#}
+{#                      <li><a href="#">Action</a></li>#}
+{#                      <li><a href="#">Another action</a></li>#}
+{#                      <li><a href="#">Something else here</a></li>#}
+{#                      <li class="divider"></li>#}
+{#                      <li><a href="#">Separated link</a></li>#}
+{#                    </ul> -->#}
+{#                  </div>#}
+{#                </div>#}
+{#              </div>#}
+{#              <!-- /.box-header -->#}
+{#              <div class="box-body">#}
+{#                <div class="row">#}
+{#                  <div class="col-md-12">#}
+{#                          <div class="col-md-12">#}
+{#                            <div class="box box-solid bg-yellow-gradient">#}
+{#                              <div class="box-header with-border">#}
+{#                               Alerts#}
+{#                              </div>#}
+{#                              <!-- /.box-header -->#}
+{#                              <div class="box-body">#}
+{#                                <div class="row">#}
+{#                                  <div class="col-md-12">#}
+{#                                      <div class="panel-body" id="alert-list" >#}
+{#                              <!-- /.list-group -->#}
+{#                              <!-- <a href="#" class="btn btn-default btn-block">Add Alerts Alerts</a> -->#}
+{#                                      </div>     #}
+{#                                  </div>#}
+{#                                  <!-- /.col -->#}
+{#                                </div>#}
+{#                                <!-- /.row -->#}
+{#                              </div>#}
+{#                              <!-- ./box-body -->#}
+{#                                <!-- /.row -->#}
+{#                              </div>#}
+{#                              <!-- /.box-footer -->#}
+{#                            </div>#}
+{#                            <div class="panel-body form">#}
+{#                              <div class="row ">#}
+{#                                    <div class="col-md-6 ">#}
+{#                                        <div class="form-group">#}
+{#                                            <label>Cameras</label>#}
+{#                                            <select id="cameras" class="form-control">#}
+{#                                                <option value="0">Camera 0</option>#}
+{#                                                <option value="1">Camera 1</option>#}
+{#                                                <option value="2">Camera 2</option>#}
+{#                                                <option value="3">Camera 3</option>#}
+{#                                                <option value="All">All</option>#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                         <div class="form-group">#}
+{#                                            <label>Alarm State</label>#}
+{#                                            <select id="alarmstate" class="form-control">#}
+{#                                                <option>Armed</option>#}
+{#                                                <option>Disarmed</option>#}
+{#                                                <option>All</option>#}
+{#                                            </select>#}
+{#                                        </div>#}
+{#                                           <div class="form-group">#}
+{#                                             <strong>Actions</strong>#}
+{#                                             <div class="checkbox ">#}
+{#                                               <label>#}
+{#                                                    <input id="email" type="checkbox" value="">Email Alert#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                            <div class="checkbox">#}
+{#                                                <label>#}
+{#                                                    <input id="trigger" type="checkbox" value="">Trigger Alarm#}
+{#                                                </label>#}
+{#                                            </div>#}
+{#                                          </div>#}
+{#                                    </div>#}
+{#                                    <div class="col-md-6 ">#}
+{#                                        #}
+{#                                         <div class="form-group">#}
+{#                                                <label>Event</label>#}
+{#                                                <select id="event" class="form-control">#}
+{#                                                    <option>Motion</option>#}
+{#                                                    <option>Recognition</option>#}
+{#                                                </select>#}
+{#                                        </div>      #}
+{#                                        <div class="form-group">#}
+{#                                                <label>Select Person</label>#}
+{#                                                <select id="people"  id="disabledSelect" class="form-control">#}
+{#                                                    <option>Intruder</option>#}
+{#                                                    <option>brandon-joffe</option>#}
+{#                                                    <option>Benji Lewis</option>#}
+{#                                                    <option>robby-katz</option>#}
+{#                                                </select>#}
+{#                                        </div>  #}
+{#                                        <div class="form-group">#}
+{#                                            <label>Confidence</label>#}
+{#                                            <label>0-100%</label>#}
+{#                                            <input type="range" name="slider3" id="slider" min="0" max="100" value="50" data-show-value="true" data-popup-enabled="true">          #}
+{#                                        </div>  #}
+{##}
+{#                                    </div>#}
+{#                                      <div class="col-lg-12">#}
+{#                                          <div class="form-group">#}
+{#                                               <label>Email Address</label>#}
+{#                                               <input class="form-control" id="emailAddress" value="" placeholder="Enter your email address">#}
+{#                                          </div>#}
+{#                                    </div>#}
+{#                                    #}
+{#                              </div> #}
+{#                           #}
+{#                            </div>#}
+{#                                  #}
+{#                        </div>#}
+{#                      </div>#}
+{#                        #}
+{#                  </div>#}
+{#                  <!-- /.col -->#}
+{#                  <div class="box-footer text-center">#}
+{#                            <div class="btn-group pull-right" id = "facedetectbtn">#}
+{#                               <button type="button pull-right" onclick="createAlert()" class="btn btn-warning btn-xs">Create</button> #}
+{#                           </div>      #}
+{#                </div>#}
+{#            </div>#}
+{#                <!-- ============================================================================================================================== -->#}
+{##}
+{#        </section>#}
 
          <section class="col-lg-3 connectedSortable">
 
-             <div class="box box-solid bg-red-gradient">
-                <div class="box-header">
-                  <i class="fa "></i>
-
-                  <h3 class="box-title">Control Panel</h3>
-                  <!-- tools box -->
-                  <div class="pull-right box-tools">
-                    <!-- button with a dropdown -->
-                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                      </button>
-                  </div>
-                  <!-- /. tools -->
-                </div>
-                <!-- /.box-header -->
-                <div class="box-body ">
-                            <div class="row">
-                                <!-- <div class="col-md-1 col-sm-1 col-xs-1">
-                                  
-                                </div>  -->
-                                <div class="col-md-3 col-sm-6 col-xs-6">
-
-                                    <div><i class="fa  fa-lock fa-5x"></i></div>
-                                    
-                                </div>  
-                                 <div class="col-md-8 col-sm-6 col-xs-6">    
-                                <div>
-                                        <span > 
-                                        <span class="info-box-text"> Alarm Status:  <strong id="alarmStatus"></strong></span>
-                                        <button type="button " id="changestate" onclick = "changeAlarmState()" class="btn btn-warning ">Arm/Disarm</button> 
-                                        <button type="button " id="panic" onclick = "panic()"  class="btn btn-danger ">Panic</button>
-                                       </span >
-
-                                   </div>   
-                               </div>   
-                        </div>
-                        <!-- /.info-box-content -->
-                      <!-- </div> -->
-                      <!-- /.info-box -->
-                    <!-- </div> -->
-                </div>
-                  <!-- /.row -->
-            
-              </div>
+{#             <div class="box box-solid bg-red-gradient">#}
+{#                <div class="box-header">#}
+{#                  <i class="fa "></i>#}
+{##}
+{#                  <h3 class="box-title">Control Panel</h3>#}
+{#                  <!-- tools box -->#}
+{#                  <div class="pull-right box-tools">#}
+{#                    <!-- button with a dropdown -->#}
+{#                      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>#}
+{#                      </button>#}
+{#                  </div>#}
+{#                  <!-- /. tools -->#}
+{#                </div>#}
+{#                <!-- /.box-header -->#}
+{#                <div class="box-body ">#}
+{#                            <div class="row">#}
+{#                                <!-- <div class="col-md-1 col-sm-1 col-xs-1">#}
+{##}
+{#                                </div>  -->#}
+{#                                <div class="col-md-3 col-sm-6 col-xs-6">#}
+{##}
+{#                                    <div><i class="fa  fa-lock fa-5x"></i></div>#}
+{##}
+{#                                </div>  #}
+{#                                 <div class="col-md-8 col-sm-6 col-xs-6">    #}
+{#                                <div>#}
+{#                                        <span > #}
+{#                                        <span class="info-box-text"> Alarm Status:  <strong id="alarmStatus"></strong></span>#}
+{#                                        <button type="button " id="changestate" onclick = "changeAlarmState()" class="btn btn-warning ">Arm/Disarm</button> #}
+{#                                        <button type="button " id="panic" onclick = "panic()"  class="btn btn-danger ">Panic</button>#}
+{#                                       </span >#}
+{##}
+{#                                   </div>   #}
+{#                               </div>   #}
+{#                        </div>#}
+{#                        <!-- /.info-box-content -->#}
+{#                      <!-- </div> -->#}
+{#                      <!-- /.info-box -->#}
+{#                    <!-- </div> -->#}
+{#                </div>#}
+{#                  <!-- /.row -->#}
+{#            #}
+{#              </div>#}
             
 
              <div class="box box-solid bg-light-blue-gradient">

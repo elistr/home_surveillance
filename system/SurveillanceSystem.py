@@ -117,7 +117,7 @@ class SurveillanceSystem(object):
     monitoring thread continually checks the system state and takes
     action if a particular event occurs. """
 
-    def __init__(self):
+    def __init__(self, gather_mode=False):
 
         self.recogniser = FaceRecogniser.FaceRecogniser()
         self.trainingEvent = threading.Event()  # Used to holt processing while training the classifier
@@ -131,8 +131,9 @@ class SurveillanceSystem(object):
         self.cameraProcessingThreads = []
         self.peopleDB = []
         self.confidenceThreshold = 20  # Used as a threshold to classify a person as unknown
+        self.gather_mode = gather_mode
 
-        # Initialization of alert processing thread 
+        # Initialization of alert processing thread
         self.alertsLock = threading.Lock()
         self.alertThread = threading.Thread(name='alerts_process_thread_', target=self.alert_engine, args=())
         self.alertThread.daemon = False
@@ -150,7 +151,8 @@ class SurveillanceSystem(object):
 
         # //////////////////////////////////////////////////// Camera Examples ////////////////////////////////////////////////////
         # self.cameras.append(Camera.IPCamera("testing/iphoneVideos/singleTest.m4v","detect_recognise_track",False)) # Video Example - uncomment and run code
-        # self.cameras.append(Camera.IPCamera("http://192.168.1.33/video.mjpg","detect_recognise_track",False))
+        self.cameras.append(Camera.IPCamera("http://10.0.0.173/videostream.cgi?user=admin&pwd=", "JingleBot",
+                                            False, False))
 
         # processing frame threads 
         for i, cam in enumerate(self.cameras):
@@ -706,7 +708,7 @@ class SurveillanceSystem(object):
             #         frame = ImageUtils.draw_boxes(frame, camera.faceBoxes, camera.dlibDetection)
             #     camera.processing_frame = frame
 
-            if camera.cameraFunction == "tf_tests":
+            if camera.cameraFunction == "JingleBot":
                 training_blocker = self.trainingEvent.wait()
 
                 frame = cv2.flip(frame, 1)  # converts frame from BGR (OpenCV format) to RGB (Dlib format)
@@ -728,7 +730,7 @@ class SurveillanceSystem(object):
                             continue
 
                     # returns a dictionary that contains name, confidence and representation and an alignedFace (numpy array)
-                    predictions, alignedFace = self.recogniser.make_prediction(frame, face_bb, original_frame)
+                    predictions, alignedFace = self.recogniser.make_prediction(frame, face_bb, original_frame, self.gather_mode)
 
                     with camera.peopleDictLock:
                         # If the person has already been detected and his new confidence is greater update persons details, otherwise create a new person
@@ -892,10 +894,7 @@ class SurveillanceSystem(object):
     def add_face(self, name, image, upload):
         """Adds face to directory used for training the classifier"""
 
-        if upload == False:
-            path = fileDir + "/aligned-images/"
-        else:
-            path = fileDir + "/training-images/"
+        path = fileDir + "/tensorflow_scripts/people_files/people_photos/"
         num = 0
 
         if not os.path.exists(path + name):
@@ -919,7 +918,7 @@ class SurveillanceSystem(object):
         """Gets all the names that were most recently
         used to train the classifier"""
 
-        path = fileDir + "/aligned-images/"
+        path = fileDir + "/tensorflow_scripts/people_files/people_photos/"
         self.peopleDB = []
         for name in os.listdir(path):
             if (name == 'cache.t7' or name == '.DS_Store' or name[0:7] == 'unknown'):

@@ -21,3 +21,44 @@ docker kill $(docker ps  | awk '{print $1}' | tail -n 1)
 
 2.go to docker container shell:
 docker exec -i -t $(docker ps  | awk '{print $1}' | tail -n 1) /bin/bash
+
+
+3. dockernet network inspect:
+[
+    {
+        "Name": "dockernet",
+        "Id": "8582101feb780a1dc60eaad711f119522b44344915f8f6fd3b0cdb6df66c763c",
+        "Created": "2018-01-21T09:23:52.58183432Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "192.168.0.0/24",
+                    "Gateway": "192.168.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "743f80fd0aa5030a3d6a90a1ebf9cf40f4c5127f189c4a5182f2656b5c575fa6": {
+                "Name": "peaceful_ritchie",
+                "EndpointID": "5c00f1770e7f7bda7f793c2f48cd5c2b1acf711229ee55342c476a58fa1e5099",
+                "MacAddress": "02:42:c0:a8:00:02",
+                "IPv4Address": "192.168.0.2/24",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]

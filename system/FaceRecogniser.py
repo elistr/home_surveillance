@@ -83,7 +83,7 @@ class FaceRecogniser(object):
         with open("generated-embeddings/classifier.pkl", 'r') as f: # le = labels, clf = classifier
             (self.le, self.clf) = pickle.load(f) # Loads labels and classifier SVM or GMM
 
-    def make_prediction(self,rgbFrame,bb, original_frame):
+    def make_prediction(self,rgbFrame,bb, original_frame, gather_mode=False):
         """The function uses the location of a face
         to detect facial landmarks and perform an affine transform
         to align the eyes and nose to the correct positiion.
@@ -102,6 +102,11 @@ class FaceRecogniser(object):
             return None
 
         logger.info("////  FACE ALIGNED  // ")
+
+        if gather_mode:
+            logger.info("////  gather_mode is ON. saving face. // ")
+            self.save_for_learning(alignedFace, original_frame)
+
         with self.neuralNetLock :
             if self.isTf:
                 persondict = self.tf.recognize_face(alignedFace, original_frame)
@@ -267,6 +272,25 @@ class FaceRecogniser(object):
 
         d = rep1 - rep2
 
+    def save_for_learning(self, image, original_frame, name="undef"):
+        path = fileDir + "/tensorflow_scripts/people_files/people_photos/"
+        num = 0
+
+        if not os.path.exists(path + name):
+            try:
+                logger.info("Creating New Face Dircectory: " + name)
+                os.makedirs(path + name)
+            except OSError:
+                logger.info(OSError)
+                return False
+                pass
+        else:
+            num = len([nam for nam in os.listdir(path + name) if os.path.isfile(os.path.join(path + name, nam))])
+
+        logger.info("Writing Image To Directory: " + name)
+        cv2.imwrite(path + name + "/" + name + "_" + str(num) + ".png", image)
+        cv2.imwrite(path + name + "/" + name + "_" + str(num) + "_original.png", original_frame)
+
 
 class FaceRecogniserNW(object):
     """This class implements face recognition using googles tenserflow and imagenet pretrained models"""
@@ -281,34 +305,3 @@ class FaceRecogniserNW(object):
         predictions = run_label(fname)
 
         return predictions[0]
-
-    def run_recognize_on_windows(self, original_numpy_image_array):
-
-        # and each window will be 220x220 image size
-        # Accutal possible area is a square: (400,400) ~ (1700, 1100)
-        IMAGE_X = 640
-        IMAGE_Y = 480
-        SIZE = 224
-
-        X1 = 0
-        # curr_dir = os.path.dirname(os.path.abspath(__file__))
-        counter = 0
-        file_names_list = []
-        while X1 <= (IMAGE_X - SIZE):
-            Y1 = 0
-            while Y1 <= (IMAGE_Y - SIZE):
-                # import pdb; pdb.set_trace()
-                crop_img = original_numpy_image_array[Y1:Y1 + SIZE, X1:X1 + SIZE]
-                # resized = cv2.resize(crop_img, (220, 299), interpolation=cv2.INTER_AREA)
-                file_name = "temp/temp_%d.jpeg" % counter
-                counter += 1
-
-                cv2.imwrite(file_name, crop_img)
-                file_names_list.append(file_name)
-
-                Y1 += int(SIZE / 2)
-            X1 += int(SIZE / 4)
-        print('Created %d windows images.' % counter)
-
-        predictions = run_inference_on_multiple_images(file_names_list)
-        print('There are %d predictions' % len(predictions.keys()))
