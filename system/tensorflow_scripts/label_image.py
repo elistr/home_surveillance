@@ -75,7 +75,7 @@ def load_labels(label_file):
 
 def run_label(file_name, model_file="people_files/retrained_graph.pb",
               label_file="people_files/retrained_labels.txt",
-              input_height=224, input_width=224, input_mean=128, input_std=128,
+              input_height=128, input_width=128, input_mean=128, input_std=128,
               input_layer="input", output_layer="final_result"):
   model_path = os.path.join(dir_path, model_file)
   label_path = os.path.join(dir_path, label_file)

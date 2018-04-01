@@ -20,20 +20,20 @@ alarmStateThread = threading.Thread()
 facesUpdateThread = threading.Thread()
 monitoringThread = threading.Thread()
 
-camURL = "http://192.168.33.21/videostream.cgi?user=admin&pwd="
-camURL_tests = "file:///host/hacks/sagi.jpg"
+camURL = "http://10.0.0.173/videostream.cgi?user=admin&pwd="
+camURL_tests = "file:///host/hacks/dan.png"
 application = "JingleBot"
 detectionMethod = False
 fpsTweak = False
 
-test = False
+test = True
 
 if test:
     camURL = camURL_tests
 
 
-# with HomeSurveillance.camerasLock:
-#     HomeSurveillance.add_camera(SurveillanceSystem.Camera.IPCamera(camURL, application, detectionMethod, fpsTweak))
+with HomeSurveillance.camerasLock:
+    HomeSurveillance.add_camera(SurveillanceSystem.Camera.IPCamera(camURL, application, detectionMethod, fpsTweak))
 
 
 
